@@ -51,12 +51,8 @@ def load_smiles_dataset(dataset_dir: str | Path) -> List[Dict[str, Any]]:
         # Process annotations
         objs = []
         for ann in annotation_data["annotations"]:
-            # Convert bbox from [x, y, w, h] to [x1, y1, x2, y2]
-            bbox = ann["bbox"]
-            x, y, w, h = bbox
-
             obj = {
-                "bbox": [x, y, x + w, y + h],
+                "bbox": ann["bbox"],
                 "bbox_mode": BoxMode.XYXY_ABS,
                 "segmentation": ann["segmentation"],
                 "category_id": ann["category_id"],
@@ -130,6 +126,7 @@ def get_dataset_stats(dataset_name: str):
             else f"Unknown_{cat_id}"
         )
         print(f"    {cat_name} (id={cat_id}): {count}")
+
 
 
 if __name__ == "__main__":

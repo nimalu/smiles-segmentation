@@ -1,3 +1,7 @@
+"""
+Script to run inference on the validation set of the SMILES dataset using a trained Detectron2 model
+"""
+
 import os
 from pathlib import Path
 
@@ -8,9 +12,10 @@ from detectron2.engine import DefaultPredictor
 from detectron2.utils.visualizer import ColorMode, Visualizer
 from register_dataset import register_smiles_dataset_splits
 
+# Define the training run name to load the correct model weights
 TRAINING_NAME = "20260119_145453"
 
-# Register dataset with train/val split (80/20) - same as training
+# Register dataset with train/val split - same as training
 register_smiles_dataset_splits(
     dataset_dir=Path(__file__).parent.parent / "dataset",
     train_ratio=0.8,
@@ -19,14 +24,10 @@ register_smiles_dataset_splits(
 smiles_metadata = MetadataCatalog.get("smiles_train")
 thing_classes = smiles_metadata.thing_classes
 
-# Configure with simple Mask R-CNN (matching 02b_train.py)
-
+# Configure model matching training script
 cfg = get_config(n_classes=len(thing_classes))
-cfg.MODEL.WEIGHTS = os.path.join(
-    Path(__file__).parent, "output", TRAINING_NAME, "model_final.pth"
-)  # Path to the trained model weights
+cfg.MODEL.WEIGHTS = os.path.join(Path(__file__).parent, "output", TRAINING_NAME, "model_final.pth")
 cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.5
-
 predictor = DefaultPredictor(cfg)
 
 

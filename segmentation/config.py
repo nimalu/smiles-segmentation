@@ -5,6 +5,14 @@ from detectron2.projects import point_rend
 
 
 def get_config(n_classes: int) -> CfgNode:
+    """
+    Get Detectron2 config for PointRend Mask R-CNN model.
+
+    :param n_classes: Number of classes for the model
+    :type n_classes: int
+    :return: Config object for the model
+    :rtype: CfgNode
+    """
     cfg = get_cfg()
     point_rend.add_pointrend_config(cfg)
     cfg.merge_from_file(f"{Path(__file__).parent}/configs/pointrend_rcnn_R_50_FPN_3x_coco.yaml")

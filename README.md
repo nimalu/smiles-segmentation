@@ -1,28 +1,20 @@
 # SMILES Instance Segmentation
 
+![Prediction 1](images/003261.png)
+
 This project trains a deep learning model to perform instance segmentation on molecular structure diagrams, detecting and segmenting individual chemical bonds and atoms from rendered SMILES notation.
 
-## Overview
+## 📌 Project Overview
 
 The project consists of two main components:
 
-1. **Synthetic Dataset Generation** - Generates a labeled dataset of molecular structure diagrams from SMILES notation with various rendering parameters (rotation, size, font, bond widths). [Details](#smiles-rendering)
-2. **Model Training and Inference** - Trains a Mask R-CNN model using Detectron2 to perform instance segmentation on molecular structures. [Details](./segmentation/README.md)
+1. **Synthetic Dataset Generation** - Generates a labeled dataset of molecular structure diagrams from SMILES notation with various rendering parameters (rotation, size, font, bond widths). 
+2. **Model Training and Inference** - Trains a Mask R-CNN model using Detectron2 to perform instance segmentation on molecular structures. 
 
-## Examples
 
-### Input Molecular Structures
-![Sample molecule 1](images/000024.png)
+## 🚀 Installation & Usage
 
-### Segmentation Results
-
-Checkout the images directory for more examples.
-
-![Prediction 1](images/003261.png)
-
-## Installation & Usage
-
-Install
+Ensure you have uv installed, then synchronize the environment:
 ```bash
 uv sync
 ```
@@ -37,15 +29,15 @@ Train the segmentation model:
 uv run python segmentation/train.py
 ```
 
-Run predictions on test images:
+Run predictions on unseen images:
 ```bash
 uv run python segmentation/predict.py
 ```
 
 
-## Synthetic Dataset Generation
+## 🧪 Synthetic Dataset Generation
 
-The main entry file is `generate_dataset.py`. 
+The main entry file is `rendering/generate_dataset.py`. 
 To create a sample the following steps are performed:
 
 1. Choose a SMILES pattern and sample rendering options, i.e. line width
@@ -54,3 +46,23 @@ To create a sample the following steps are performed:
 4. Crop and scale the image
 5. Extract segmentations masks and class labels from the SVG
 6. Convert the SVG into a PNG
+
+**Example molecules:**
+
+![example-molecules](./images/molecules.png)
+
+## 🧠 Model Training and Inference
+
+The code for training and inference is inside the `segmentation` directory.
+We utilize the Detectron2 library. 
+Molecular diagrams present unique challenges compared to natural images, specifically regarding fine-line features.
+
+**Key Findings**
+- **Resultion matters:**: Too small input sizes cause thin lines (like dashed wedge bonds) to disappear within the feature extraction backbone. Increasing the input resolution was critical for maintaining feature signal.
+- **PointRend Enhancement**: We utilized the [PointRend](https://github.com/facebookresearch/detectron2/tree/main/projects/PointRend) module. resulting in significantly "crisper" segmentation boundaries.
+
+
+There are many parameters that influence the training and thus the final model.
+I ended up using a ResNet50 backbone because there are pretrained model weights available for the PointRend variant.
+I trained for 1000 iterations which took about 15mins on a NVIDIA A100.
+The results look quite decent. Some example predictions can be seen inside the `images` directory.

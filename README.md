@@ -6,17 +6,19 @@ This project trains a deep learning model to perform instance segmentation on mo
 
 The project consists of two main components:
 
-1. **Synthetic Dataset Generation** - Automatically generates a labeled dataset of molecular structure diagrams from SMILES notation with various rendering parameters (rotation, size, font, bond widths)
-2. **Model Training and Inference** - Trains a Mask R-CNN model using Detectron2 to perform instance segmentation on molecular structures
+1. **Synthetic Dataset Generation** - Generates a labeled dataset of molecular structure diagrams from SMILES notation with various rendering parameters (rotation, size, font, bond widths). [Details](#smiles-rendering)
+2. **Model Training and Inference** - Trains a Mask R-CNN model using Detectron2 to perform instance segmentation on molecular structures. [Details](./segmentation/README.md)
 
 ## Examples
 
 ### Input Molecular Structures
-![Sample molecule 1](dataset/images/000000.png)
+![Sample molecule 1](images/000024.png)
 
 ### Segmentation Results
 
-![Prediction 1](debug/002089.png)
+Checkout the images directory for more examples.
+
+![Prediction 1](images/003261.png)
 
 ## Installation & Usage
 
@@ -32,26 +34,23 @@ uv run python rendering/generate_dataset.py
 
 Train the segmentation model:
 ```bash
-uv run python segmentation/02_train.py
+uv run python segmentation/train.py
 ```
 
 Run predictions on test images:
 ```bash
-uv run python segmentation/03_predict.py
+uv run python segmentation/predict.py
 ```
 
-## Dataset Generation Pipeline
 
-- Using RDKit, a SMILES string is rendered to SVG
-- A few postprocessing steps are applied to extract instance segmentation masks for each object
-- The SVG is converted to PNG
+## Synthetic Dataset Generation
 
+The main entry file is `generate_dataset.py`. 
+To create a sample the following steps are performed:
 
-## Model Training Pipeline
-
-- Uses Detectron2's Mask R-CNN architecture 
-- performs fine-tuning on a pretrained COCO model
-
-## Known limitations
-
-- Because of the way the renderer converts SVG paths into polygons, it creates artifacts for donut-like shapes.
+1. Choose a SMILES pattern and sample rendering options, i.e. line width
+2. Use RDKit to generate an SVG file
+3. Flatten svg path objects to polygons 
+4. Crop and scale the image
+5. Extract segmentations masks and class labels from the SVG
+6. Convert the SVG into a PNG

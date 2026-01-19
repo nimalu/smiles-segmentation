@@ -5,6 +5,21 @@ from xml.etree import ElementTree
 def extract_coco_label(
     svg_path: Path, image_path: str, image_id: str, class_to_id: dict[str, int]
 ) -> dict:
+    """
+    Extract COCO-style label dictionary from an SVG file.
+    Note: Assumes that the SVG has been annotated with instance and class information.
+
+    :param svg_path: Path to the SVG file
+    :type svg_path: Path
+    :param image_path: Path to the image file
+    :type image_path: str
+    :param image_id: Unique identifier for the image
+    :type image_id: str
+    :param class_to_id: Mapping from instance class names to category IDs
+    :type class_to_id: dict[str, int]
+    :return: COCO-style label dictionary
+    :rtype: dict
+    """
     with open(svg_path, "r") as f:
         svg = f.read()
 
@@ -18,11 +33,11 @@ def extract_coco_label(
         "width": width,
         "height": height,
         "image_id": image_id,
-        "annotations": extract_coco_annotations_from_svg(svg, class_to_id),
+        "annotations": _extract_coco_annotations_from_svg(svg, class_to_id),
     }
 
 
-def extract_coco_annotations_from_svg(svg: str, class_to_id: dict[str, int]) -> list[dict]:
+def _extract_coco_annotations_from_svg(svg: str, class_to_id: dict[str, int]) -> list[dict]:
     annotations = []
     svg_root = ElementTree.fromstring(svg)
     instance_ids = set()

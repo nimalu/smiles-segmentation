@@ -26,22 +26,16 @@ cfg.MODEL.WEIGHTS = os.path.join(
     Path(__file__).parent, "output", TRAINING_NAME, "model_final.pth"
 )  # Path to the trained model weights
 cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.5
+
 predictor = DefaultPredictor(cfg)
 
 
-# Get validation dataset and take only 5 samples
 val_dataset = DatasetCatalog.get("smiles_val")
-
 os.makedirs("debug", exist_ok=True)
 
-for d in val_dataset[:5]:
+for d in val_dataset[:20]:
     im = cv2.imread(d["file_name"])
     outputs = predictor(im)
-    if len(outputs["instances"]) == 0:
-        print("No instances detected.")
-        continue
-    else:
-        print(f"Detected {len(outputs['instances'])} instances.")
 
     v = Visualizer(
         im[:, :, ::-1],

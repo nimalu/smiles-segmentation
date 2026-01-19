@@ -6,6 +6,14 @@ from . import Options
 
 
 def create_mol(smiles: str) -> Chem.Mol:
+    """
+    Creates an RDKit Mol object from a SMILES string
+
+    :param smiles: SMILES string representing the molecule
+    :type smiles: str
+    :return: RDKit Mol object representing the molecule
+    :rtype: Chem.Mol
+    """
     mol = Chem.MolFromSmiles(smiles)
     if mol is None:
         raise ValueError(f"Invalid SMILES string: {smiles}")

@@ -10,6 +10,14 @@ from . import renderer
 
 
 def extract_classes_from_svg(svg: str) -> set[str]:
+    """
+    Extract unique instance classes from SVG content.
+
+    :param svg: SVG content as a string
+    :type svg: str
+    :return: Set of unique instance classes found in the SVG
+    :rtype: set[str]
+    """
     classes = set()
     svg_root = ElementTree.fromstring(svg)
     for element in list(svg_root.iter()):
@@ -86,8 +94,8 @@ def annotate_svg_with_instances(svg: str, mol: Chem.Mol, options: renderer.Optio
     Add semantic information to SVG molecular diagrams.
 
     Post-processes RDKit-generated SVG by adding instance IDs and classes to
-    identify individual atoms and bonds. This enables subsequent coloring and
-    analysis of molecular fragments.
+    identify individual atoms and bonds. This enables distinguishing between
+    different molecular components in downstream applications.
 
     Args:
         svg (str): Raw SVG content from RDKit
@@ -100,13 +108,6 @@ def annotate_svg_with_instances(svg: str, mol: Chem.Mol, options: renderer.Optio
     Note:
         This function removes non-molecular SVG paths if remove_non_molecular_paths
         is True in the options.
-    """
-    """
-    Post-process the SVG output by adding instance IDs and classes.
-    Each atom and bond is assigned a unique instance ID and a class based on
-    its type (element symbol for atoms, bond type for bonds).
-
-    Non-atom/bond paths are removed from the SVG.
     """
     bond_types = [str(bond.GetBondType()) for bond in mol.GetBonds()]
     bond_dirs = [str(bond.GetBondDir()) for bond in mol.GetBonds()]
@@ -297,40 +298,6 @@ def flatten_paths_to_polygons(svg: str, n_per_curve=5) -> str:
             del element.attrib["d"]
         if "stroke-width" in element.attrib:
             del element.attrib["stroke-width"]
-
-    return ElementTree.tostring(svg_root, encoding="unicode")
-
-
-def color_instances(svg: str):
-    """
-    Color instances in the SVG output. Each unique instance-id is assigned a unique color.
-    """
-    matches = re.finditer(r'instance-id="(\d+)"', svg)
-    instance_ids = {int(m.group(1)) for m in matches}
-    svg_root = ElementTree.fromstring(svg)
-    for color, instance_id in zip(_unique_colors(), sorted(instance_ids)):
-        # find all elements with the current instance-id
-        instance_elements = []
-        for element in list(svg_root.iter()):
-            if element.get("instance-id") == str(instance_id):
-                instance_elements.append(element)
-
-        # set the color of these elements
-        for element in instance_elements:
-            # adjust style
-            style = element.get("style", "")
-            style_dict = dict(s.split(":") for s in style.split(";") if s)
-            if "stroke" in style_dict:
-                style_dict["stroke"] = color
-
-            if "fill" in style_dict and style_dict["fill"] != "none":
-                style_dict["fill"] = color
-            style = ";".join(f"{k}:{v}" for k, v in style_dict.items())
-            element.set("style", style)
-
-            # adjust fill
-            if "fill" in element.attrib:
-                element.set("fill", color)
 
     return ElementTree.tostring(svg_root, encoding="unicode")
 

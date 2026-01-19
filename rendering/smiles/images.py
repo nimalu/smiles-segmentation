@@ -15,7 +15,7 @@ def svg_to_pil(svg: str):
         svg (str): SVG content as a string
 
     Returns:
-        PIL.Image.Image: PIL Image object containing the rasterized molecular diagram
+        PIL.Image: PIL Image object containing the rasterized molecular diagram
 
     Raises:
         ValueError: If SVG conversion fails

@@ -1,10 +1,3 @@
-"""
-Configuration options for molecular rendering.
-
-This module defines the Options dataclass that controls various aspects
-of molecular diagram generation using RDKit.
-"""
-
 from dataclasses import dataclass
 
 
@@ -13,7 +6,7 @@ class Options:
     """
     Configuration options for molecular rendering.
 
-    This class contains all configurable parameters for generating molecular diagrams,
+    This class contains configurable parameters for generating molecular diagrams,
     including dimensions, colors, fonts, and various display options.
     """
 

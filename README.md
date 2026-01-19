@@ -47,6 +47,17 @@ To create a sample the following steps are performed:
 5. Extract segmentations masks and class labels from the SVG
 6. Convert the SVG into a PNG
 
+
+Note that there are currently 6 classes:
+
+- **SINGLE-NONE**: Single chemical bonds (plain lines)
+- **DOUBLE-NONE**: Double chemical bonds, shown as two parallel lines
+- **ATOM**: Individual atom symbols (e.g., C, O, N) 
+- **SINGLE-BEGINDASH**: Single bonds rendered with dashed lines,  indicating stereochemistry
+- **SINGLE-BEGINWEDGE**: Single bonds rendered with a wedge, representing 3D orientation (out of plane)
+- **AROMATIC-NONE**: Aromatic bonds, depicted as alternating single/double bonds
+
+
 **Example molecules:**
 
 ![example-molecules](./images/molecules.png)

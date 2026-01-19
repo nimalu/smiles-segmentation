@@ -1,14 +1,33 @@
 [project]
-name = "smiles-segmentation"
+name = "smiles"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "cairosvg>=2.8.2",
+    "rdkit>=2025.9.1",
+    "svgpathtools>=1.7.1",
+    "tqdm>=4.67.1",
+    "torch>=2.9.1",
+    "torchvision>=0.24.1",
     "detectron2",
     "ipykernel>=7.1.0",
-    "torch>=2.9.1",
+    "opencv-python>=4.12.0.88",
+    "shapely>=2.1.2",
 ]
 
 [tool.uv.sources]
 detectron2 = { git = "https://github.com/facebookresearch/detectron2.git" }
+
+[dependency-groups]
+dev = [
+    "ruff>=0.14.0",
+    "pytest>=8.0.0",
+]
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]

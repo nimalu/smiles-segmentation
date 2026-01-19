@@ -12,7 +12,6 @@ from detectron2 import model_zoo
 from detectron2.config import get_cfg
 from detectron2.data import MetadataCatalog, build_detection_test_loader
 from detectron2.engine import DefaultTrainer, HookBase
-from detectron2.projects.point_rend import add_pointrend_config
 from detectron2.utils.events import get_event_storage
 from register_dataset import register_smiles_dataset_splits
 
@@ -26,25 +25,16 @@ smiles_metadata = MetadataCatalog.get("smiles_train")
 thing_classes = smiles_metadata.thing_classes
 
 
-# Configure Detectron2 with PointRend for training
+# Configure Detectron2 with simple Mask R-CNN for training
 cfg = get_cfg()
-add_pointrend_config(cfg)
+# Use the lightest Mask R-CNN model with MobileNetV2 backbone
 cfg.merge_from_file(
-    model_zoo.get_config_file("COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml")
+    model_zoo.get_config_file("COCO-InstanceSegmentation/mask_rcnn_R_50_C4_3x.yaml")
 )
-cfg.merge_from_file(str(Path(__file__).parent / "configs" / "Base-PointRend-RCNN-FPN.yaml"))
-# Load Pre-trained PointRend Weights
-cfg.MODEL.WEIGHTS = "detectron2://PointRend/InstanceSegmentation/pointrend_rcnn_R_50_FPN_3x_coco/164955410/model_final_edd263.pkl"
-
-
-cfg.MODEL.POINT_HEAD.NUM_CLASSES = len(thing_classes)
-cfg.MODEL.ROI_MASK_HEAD.POOLER_RESOLUTION = 14
-
-cfg.MODEL.POINT_HEAD.TRAIN_NUM_POINTS = 2048
-cfg.MODEL.POINT_HEAD.SUBDIVISION_STEPS = 5
-cfg.MODEL.POINT_HEAD.SUBDIVISION_NUM_POINTS = 8192
-cfg.MODEL.POINT_HEAD.IN_TEST = True
-
+# Load COCO pre-trained weights - using C4 backbone which is simpler than FPN
+cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url(
+    "COCO-InstanceSegmentation/mask_rcnn_R_50_C4_3x.yaml"
+)
 
 # Multi-scale training
 cfg.INPUT.MIN_SIZE_TRAIN = (960, 1024, 1100)
@@ -55,9 +45,9 @@ cfg.DATALOADER.NUM_WORKERS = 4
 
 
 # Optimizer settings
-cfg.SOLVER.IMS_PER_BATCH = 8  # PointRend uses more memory, keep conservative
+cfg.SOLVER.IMS_PER_BATCH = 8
 cfg.SOLVER.BASE_LR = 0.002
-cfg.SOLVER.MAX_ITER = 2000  # PointRend converges slightly slower
+cfg.SOLVER.MAX_ITER = 2000
 cfg.SOLVER.STEPS = (1000, 1800)  # Learning rate decay steps
 cfg.SOLVER.GAMMA = 0.1  # Learning rate decay factor
 cfg.SOLVER.WARMUP_ITERS = 250  # Gradual warmup

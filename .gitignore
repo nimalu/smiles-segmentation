@@ -2,3 +2,5 @@
 dataset/
 __pycache__
 .ruff_cache
+debug/
+slurm-logs/

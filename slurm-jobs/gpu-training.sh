@@ -10,4 +10,4 @@
 #SBATCH --output=slurm-logs/gpu_training_%j.log
 
 
-uv run 02_train.py
+uv run python segmentation/02_train.py 

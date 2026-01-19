@@ -161,10 +161,10 @@ def generate_dataset(
 
 
 def main():
-    # if OUTPUT_DIR.exists():
-    #     raise FileExistsError(
-    #         f"Output directory {OUTPUT_DIR} already exists. Please remove it before running."
-    #     )
+    if OUTPUT_DIR.exists():
+        raise FileExistsError(
+            f"Output directory {OUTPUT_DIR} already exists. Please remove it before running."
+        )
 
     generate_dataset(
         output_base=OUTPUT_DIR,

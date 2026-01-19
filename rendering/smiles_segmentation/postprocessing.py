@@ -72,6 +72,12 @@ def crop_scale_svg(svg: str, padding=5, scale=1.0) -> str:
     svg_root.set("height", str(height))
     svg_root.set("viewBox", f"0 0 {width} {height}")
 
+    # update background rectangle if present
+    for element in list(svg_root.iter()):
+        if element.tag == r"{http://www.w3.org/2000/svg}rect":
+            element.set("width", str(width))
+            element.set("height", str(height))
+
     return ElementTree.tostring(svg_root, encoding="unicode")
 
 

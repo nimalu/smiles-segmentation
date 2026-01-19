@@ -60,8 +60,12 @@ def load_smiles_dataset(dataset_dir: str | Path) -> List[Dict[str, Any]]:
             }
             objs.append(obj)
 
-        record["annotations"] = objs
-        dataset_dicts.append(record)
+        # Only add images that have at least one annotation
+        if len(objs) > 0:
+            record["annotations"] = objs
+            dataset_dicts.append(record)
+        else:
+            print(f"Warning: Skipping {json_file} - no annotations")
 
     return dataset_dicts
 

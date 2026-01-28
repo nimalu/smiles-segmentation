@@ -51,6 +51,8 @@ To create a sample the following steps are performed:
 Note that there are currently 6 classes:
 
 - **SINGLE-NONE**: Single chemical bonds (plain lines)
+<img src="images/sample-5.png" />
+![single-none](./images/sample-5.png)
 - **DOUBLE-NONE**: Double chemical bonds, shown as two parallel lines
 - **ATOM**: Individual atom symbols (e.g., C, O, N) 
 - **SINGLE-BEGINDASH**: Single bonds rendered with dashed lines,  indicating stereochemistry
@@ -58,9 +60,6 @@ Note that there are currently 6 classes:
 - **AROMATIC-NONE**: Aromatic bonds, depicted as alternating single/double bonds
 
 
-**Example molecules:**
-
-![example-molecules](./images/molecules.png)
 
 ## 🧠 Model Training and Inference
 

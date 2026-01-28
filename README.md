@@ -150,3 +150,8 @@ The predictions, however, seem not to be affected by this.
 
 <img src="images/sample-1.png" width=400>
 
+
+3. **Small Dashed Wedge Features**: When the dashes of a dashed wedge bond (SINGLE-BEGINDASH) appear small in the rendered image, the model's predicted masks tend to be less accurate, often missing individual dashes or producing fragmented segmentations.
+
+
+<img src="images/003261.png" width=400>

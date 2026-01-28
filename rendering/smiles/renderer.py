@@ -2,7 +2,7 @@ from rdkit import Chem
 from rdkit.Chem import AllChem
 from rdkit.Chem.Draw import rdMolDraw2D
 
-from . import Options
+from .options import Options
 
 
 def create_mol(smiles: str) -> Chem.Mol:

@@ -121,6 +121,11 @@ The training script will:
 4. Save checkpoints every 500 iterations
 5. Save all outputs to `segmentation/output/<timestamp>/`
 
+**Download pretrained model weights**:
+
+If you want to skip training, download the weights here:
+- [Pretrained Model Weights](https://bwsyncandshare.kit.edu/s/t7kd2TctQ5z3ocZ)
+
 **Run inference on validation set**:
 ```bash
 # First, update TRAINING_NAME in segmentation/predict.py with your training timestamp
